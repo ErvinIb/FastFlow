@@ -2,3 +2,5 @@ _fastflow_experiment_checkpoints
 .idea
 __pycache__
 venv
+mvtec-ad
+.vscode

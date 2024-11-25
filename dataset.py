@@ -25,13 +25,16 @@ class MVTecDataset(torch.utils.data.Dataset):
             self.target_transform = transforms.Compose(
                 [
                     transforms.Resize(input_size),
+                    #transforms.Grayscale(num_output_channels=3),
                     transforms.ToTensor(),
                 ]
             )
         self.is_train = is_train
+        #self._input_size = input_size
 
     def __getitem__(self, index):
         image_file = self.image_files[index]
+        #image = Image.open(image_file).convert("RGB")
         image = Image.open(image_file)
         image = self.image_transform(image)
         if self.is_train:
@@ -40,12 +43,14 @@ class MVTecDataset(torch.utils.data.Dataset):
             if os.path.dirname(image_file).endswith("good"):
                 target = torch.zeros([1, image.shape[-2], image.shape[-1]])
             else:
+                #print("I: ",image_file)
                 target = Image.open(
-                    image_file.replace("/test/", "/ground_truth/").replace(
+                    image_file.replace("\\test\\", "\\ground_truth\\").replace(
                         ".png", "_mask.png"
                     )
                 )
                 target = self.target_transform(target)
+                #torch.reshape(target, self._input_size)
             return image, target
 
     def __len__(self):

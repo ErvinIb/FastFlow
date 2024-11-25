@@ -98,7 +98,8 @@ def eval_once(dataloader, model):
         outputs = outputs.flatten()
         targets = targets.flatten()
         auroc_metric.update((outputs, targets))
-    auroc = auroc_metric.compute()
+    auroc = auroc_metric.compute() # will fail here. FF output is incorrect and giving negative elements in the tensor
+    # SKLearn thus thinks the value is a continuous function
     print("AUROC: {}".format(auroc))
 
 
